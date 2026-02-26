@@ -1,0 +1,158 @@
+/* =========================
+   PART A: Student–Enrollment
+   ========================= */
+
+-- 1.
+SELECT S.STUDENT_ID, S.NAME, E.COURSE_ID 
+FROM Student S 
+INNER JOIN Enrollment E 
+ON S.STUDENT_ID = E.STUDENT_ID;
+
+-- 2.
+SELECT S.NAME, E.SEMESTER 
+FROM Student S 
+INNER JOIN Enrollment E 
+ON S.STUDENT_ID = E.STUDENT_ID;
+
+-- 3.
+SELECT S.NAME, E.GRADE 
+FROM Student S 
+INNER JOIN Enrollment E 
+ON S.STUDENT_ID = E.STUDENT_ID;
+
+
+/* =========================
+   PART B: Course–Faculty
+   ========================= */
+
+-- 4.
+SELECT C.COURSE_NAME, C.CREDITS, F.NAME 
+FROM Course C 
+INNER JOIN Faculty F 
+ON C.FACULTY_ID = F.FACULTY_ID;
+
+-- 5.
+SELECT C.COURSE_NAME 
+FROM Course C 
+INNER JOIN Faculty F 
+ON C.FACULTY_ID = F.FACULTY_ID 
+WHERE F.FACULTY_ID = 402;
+
+-- 6.
+SELECT F.NAME, F.DESIGNATION, C.COURSE_NAME 
+FROM Faculty F 
+INNER JOIN Course C 
+ON F.FACULTY_ID = C.FACULTY_ID;
+
+
+/* =========================
+   PART C: Student–Course–Enrollment
+   ========================= */
+
+-- 7.
+SELECT S.NAME, C.COURSE_NAME 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID;
+
+-- 8.
+SELECT S.NAME, C.COURSE_NAME, E.SEMESTER 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID;
+
+-- 9.
+SELECT S.NAME, C.COURSE_NAME, E.GRADE 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID 
+WHERE E.SEMESTER = '5th Semester';
+
+-- 10.
+SELECT C.COURSE_NAME 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID 
+WHERE S.STUDENT_ID = 701;
+
+
+/* =========================
+   PART D: Department-Based JOIN
+   ========================= */
+
+-- 11.
+SELECT S.NAME, S.DEPARTMENT_ID, C.COURSE_NAME 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID;
+
+-- 12.
+SELECT D.DEPARTMENT_NAME, C.COURSE_NAME 
+FROM Department D 
+INNER JOIN Course C 
+ON D.DEPARTMENT_ID = C.DEPARTMENT_ID;
+
+-- 13.
+SELECT F.NAME, D.DEPARTMENT_NAME 
+FROM Faculty F 
+INNER JOIN Department D 
+ON F.DEPARTMENT_ID = D.DEPARTMENT_ID;
+
+
+/* =========================
+   PART E: Filtering & Sorting
+   ========================= */
+
+-- 14.
+SELECT S.NAME, C.COURSE_NAME 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID 
+WHERE S.DEPARTMENT_ID = 1;
+
+-- 15.
+SELECT S.NAME, C.COURSE_NAME 
+FROM Student S 
+INNER JOIN Enrollment E ON S.STUDENT_ID = E.STUDENT_ID 
+INNER JOIN Course C ON E.COURSE_ID = C.COURSE_ID 
+ORDER BY S.NAME ASC;
+
+-- 16.
+SELECT F.NAME, C.COURSE_NAME 
+FROM Faculty F 
+INNER JOIN Course C 
+ON F.FACULTY_ID = C.FACULTY_ID 
+ORDER BY C.CREDITS DESC;
+
+
+/* =========================
+   PART F: Analytical JOIN Queries
+   ========================= */
+
+-- 17.
+SELECT C.COURSE_NAME, COUNT(E.STUDENT_ID) AS TOTAL_STUDENTS 
+FROM Course C 
+INNER JOIN Enrollment E 
+ON C.COURSE_ID = E.COURSE_ID 
+GROUP BY C.COURSE_NAME;
+
+-- 18.
+SELECT F.NAME, COUNT(C.COURSE_ID) AS TOTAL_COURSES 
+FROM Faculty F 
+INNER JOIN Course C 
+ON F.FACULTY_ID = C.FACULTY_ID 
+GROUP BY F.NAME;
+
+-- 19.
+SELECT D.DEPARTMENT_NAME, COUNT(S.STUDENT_ID) AS TOTAL_STUDENTS 
+FROM Department D 
+INNER JOIN Student S 
+ON D.DEPARTMENT_ID = S.DEPARTMENT_ID 
+GROUP BY D.DEPARTMENT_NAME;
+
+-- 20.
+SELECT C.COURSE_NAME, MAX(E.GRADE) AS MAX_GRADE 
+FROM Course C 
+INNER JOIN Enrollment E 
+ON C.COURSE_ID = E.COURSE_ID 
+GROUP BY C.COURSE_NAME;
